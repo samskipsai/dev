@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>44agents Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 400px;
+            min-height: 500px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Oxygen', Ubuntu, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF6D5A 0%, #FF5722 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .header .version {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        input[type="text"], input[type="password"], select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #FF6D5A;
+            box-shadow: 0 0 0 3px rgba(255, 109, 90, 0.1);
+        }
+
+        .api-key-input {
+            position: relative;
+        }
+
+        .api-key-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot.connected {
+            background: #4CAF50;
+        }
+
+        .status-dot.disconnected {
+            background: #f44336;
+        }
+
+        .status-dot.checking {
+            background: #FF9800;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #FF6D5A 0%, #FF5722 100%);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 109, 90, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            width: auto;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .usage-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #FF6D5A;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .footer {
+            padding: 16px 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .footer a {
+            color: #FF6D5A;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 8px;
+            border: 1px solid #ffcdd2;
+        }
+
+        .success-message {
+            background: #e8f5e8;
+            color: #2e7d2e;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 8px;
+            border: 1px solid #c8e6c9;
+        }
+
+        .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #fff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            <span>🤖</span>
+            44agents
+        </h1>
+        <div class="version">v1.0.0 - AI Workflow Generator</div>
+    </div>
+
+    <div class="content">
+        <!-- AI Service Configuration -->
+        <div class="section">
+            <h3>AI Service Configuration</h3>
+            
+            <div class="form-group">
+                <label for="preferred-provider">Preferred AI Provider</label>
+                <select id="preferred-provider">
+                    <option value="claude">Claude (Anthropic)</option>
+                    <option value="openai">OpenAI GPT</option>
+                    <option value="gemini">Google Gemini</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="claude-api-key">Claude API Key</label>
+                <div class="api-key-input">
+                    <input type="password" id="claude-api-key" placeholder="sk-ant-...">
+                    <button class="api-key-toggle" onclick="togglePasswordVisibility('claude-api-key')">👁️</button>
+                </div>
+                <div class="status-indicator" id="claude-status" style="display: none;">
+                    <div class="status-dot"></div>
+                    <span class="status-text"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="openai-api-key">OpenAI API Key</label>
+                <div class="api-key-input">
+                    <input type="password" id="openai-api-key" placeholder="sk-...">
+                    <button class="api-key-toggle" onclick="togglePasswordVisibility('openai-api-key')">👁️</button>
+                </div>
+                <div class="status-indicator" id="openai-status" style="display: none;">
+                    <div class="status-dot"></div>
+                    <span class="status-text"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="gemini-api-key">Gemini API Key</label>
+                <div class="api-key-input">
+                    <input type="password" id="gemini-api-key" placeholder="AI...">
+                    <button class="api-key-toggle" onclick="togglePasswordVisibility('gemini-api-key')">👁️</button>
+                </div>
+                <div class="status-indicator" id="gemini-status" style="display: none;">
+                    <div class="status-dot"></div>
+                    <span class="status-text"></span>
+                </div>
+            </div>
+
+            <button class="btn" id="validate-keys">
+                <span class="loading" id="validate-loading" style="display: none;">
+                    <div class="spinner"></div>
+                    Validating...
+                </span>
+                <span id="validate-text">Validate API Keys</span>
+            </button>
+
+            <div id="validation-message"></div>
+        </div>
+
+        <!-- Generation Preferences -->
+        <div class="section">
+            <h3>Generation Preferences</h3>
+
+            <div class="form-group">
+                <label for="complexity">Preferred Workflow Complexity</label>
+                <select id="complexity">
+                    <option value="simple">Simple (fewer nodes)</option>
+                    <option value="medium">Medium (balanced)</option>
+                    <option value="complex">Complex (comprehensive)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="error-handling" checked>
+                    <label for="error-handling">Include error handling</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="optimize-cost">
+                    <label for="optimize-cost">Optimize for cost (use cheaper models)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Statistics -->
+        <div class="section">
+            <h3>Usage Statistics</h3>
+            <div class="usage-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="total-workflows">0</div>
+                    <div class="stat-label">Workflows Generated</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-cost">$0.00</div>
+                    <div class="stat-label">Total Cost</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="section">
+            <div class="btn-group">
+                <button class="btn btn-secondary btn-small" id="export-data">Export Data</button>
+                <button class="btn btn-secondary btn-small" id="clear-data">Clear Data</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>
+            <a href="https://github.com/44agents" target="_blank">GitHub</a> • 
+            <a href="https://44agents.com/docs" target="_blank">Documentation</a> • 
+            <a href="https://44agents.com/support" target="_blank">Support</a>
+        </p>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
